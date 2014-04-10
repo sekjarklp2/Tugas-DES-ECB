@@ -247,22 +247,15 @@ public class DES {
 	
 	public static byte[] encrypt(byte[] data, byte[] key) {
             paddingLength = 0;
-            byte[] padding = new byte[1];
             int i;
             // hitung panjang string plaintext dan tambahkan byte 0 jika panjangnya tidak kelipatan 8
-            if (data.length % 8 > 0) {
-                paddingLength = 8 - (data.length % 8);
-                padding = new byte[paddingLength];
-                for (i = 0; i < paddingLength; i++)
-                    padding[i] = 0;
-            }
+            if (data.length % 8 > 0) paddingLength = 8 - (data.length % 8);
 
             byte[] tmp = new byte[data.length + paddingLength];
             byte[] bloc = new byte[8];
             // generate subkey dari key yang diberikan
             K = genSubKeys(key);
 
-            int count = 0;
             // untuk setiap byte data
             for (i = 0; i < data.length + paddingLength; i++) {
                 // setiap 8 byte / 64 bit
@@ -271,12 +264,8 @@ public class DES {
                     System.arraycopy(bloc, 0, tmp, i - 8, bloc.length);
                 }
                 // cek yang ditambahkan ke block padding / bukan
-                if (i < data.length)
-                    bloc[i % 8] = data[i];
-                else {														
-                    bloc[i % 8] = padding[count % 8];
-                    count++;
-                }
+                if (i < data.length) bloc[i % 8] = data[i];
+                else bloc[i % 8] = 0;
             }
 
             if(bloc.length == 8){
