@@ -147,9 +147,7 @@ public class DES {
 	}
 	
 	private static byte[] blockEncrypt(byte[] bloc,byte[][] subkeys, boolean isDecrypt) {
-            byte[] tmp = new byte[bloc.length];
-            byte[] R = new byte[bloc.length / 2];
-            byte[] L = new byte[bloc.length / 2];
+            byte[] tmp, R, L;
             // permutasikan block 64 bit ini dengan initial permutation
             tmp = permutate(bloc, IP);
             // bagi menjadi 2 bagian @28 bit
@@ -268,10 +266,9 @@ public class DES {
                 else bloc[i % 8] = 0;
             }
 
-            if(bloc.length == 8){
-                bloc = blockEncrypt(bloc,K, false);
-                System.arraycopy(bloc, 0, tmp, i - 8, bloc.length);
-            }
+            bloc = blockEncrypt(bloc,K, false);
+            System.arraycopy(bloc, 0, tmp, i - 8, bloc.length);
+            
             return tmp;
 	}
 
